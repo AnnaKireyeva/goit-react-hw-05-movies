@@ -1,4 +1,65 @@
-/* .active {
-  composes: link;
+.goBackBtn {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.movieBox {
+  display: flex;
+  padding: 10px;
+}
+
+.moviePoster {
+  max-width: 400px;
+}
+
+.aboutMovieWrapper {
+  padding: 10px;
+  /* max-width: 1000px; */
+}
+
+.movieTitle {
+  margin-bottom: 20px;
+  color: #2e2e2e;
+  text-shadow: 1px 1px 1px #e60448;
+}
+.releaseDate {
+  font-weight: 500;
+  margin-right: 10px;
+}
+.movieRating {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+.ratingCaption {
+  font-weight: 500;
+}
+.overviewTitle {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.genres {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.genreItem {
+  font-weight: 400;
+}
+.information {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.informationLink {
+  color: #2e2e2e;
+}
+
+.informationLink:hover,
+.informationLink:focus {
   color: #ff255f;
-} */
+}

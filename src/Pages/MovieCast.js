@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import api from '../Services/ApiService';
 import styles from './MovieCast.module.css';
+import noImage from '../Images/no-image.jpg';
+import PropTypes from 'prop-types';
 
 export default function MovieCast({ movieId }) {
   const [cast, setCast] = useState(null);
@@ -24,7 +26,11 @@ export default function MovieCast({ movieId }) {
                 <div>
                   <img
                     className={styles.actorImg}
-                    src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+                    src={
+                      actor.profile_path
+                        ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
+                        : noImage
+                    }
                     alt={actor.original_name}
                   />
                 </div>
@@ -38,3 +44,7 @@ export default function MovieCast({ movieId }) {
     </>
   );
 }
+
+MovieCast.propTypes = {
+  movieId: PropTypes.string.isRequired,
+};

@@ -1,13 +1,30 @@
-import { useState, useEffect } from 'react';
-import { NavLink, useParams, useRouteMatch, Route } from 'react-router-dom';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import {
+  NavLink,
+  useParams,
+  useRouteMatch,
+  Route,
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 import api from '../Services/ApiService';
-import Loader from 'react-loader-spinner';
+import { LoaderSpinner } from '../Components/LoaderSpinner/LoaderSpinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import styles from './MovieDetailsView.module.css';
-import MovieCast from './MovieCast';
-import MovieReview from './MovieReview';
+// import MovieCast from './MovieCast';
+// import MovieReview from './MovieReview';
+import noImage from '../Images/no-image.jpg';
+
+const MovieCast = lazy(() =>
+  import('./MovieCast.js' /* webpackChunkName: "MovieCast" */),
+);
+const MovieReview = lazy(() =>
+  import('./MovieReview.js' /* webpackChunkName: "MovieReviews" */),
+);
 
 export default function MovieDetailsView() {
+  const history = useHistory();
+  const location = useLocation();
   const { movieId } = useParams();
   const { url, path } = useRouteMatch();
   const [movie, setMovie] = useState({});
@@ -25,89 +42,99 @@ export default function MovieDetailsView() {
     });
   }, [movieId]);
 
+  const handleGoBackButton = () => {
+    history.push(location?.state?.from ?? '/');
+    console.log(location);
+  };
+
   return (
     <>
-      {loading && (
-        <Loader
-          type="Oval"
-          color="#FF6347"
-          height={80}
-          width={80}
-          timeout={5000}
-          className="Loader"
-        />
-      )}
+      {loading && <LoaderSpinner />}
       {movie && (
         <>
-          <button type="button">Go back</button>
+          <button
+            type="button"
+            className={styles.goBackBtn}
+            onClick={handleGoBackButton}
+          >
+            Go back
+          </button>
           <div className={styles.movieBox}>
             <div className={styles.imgWrapper}>
               <img
                 id={movieId}
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : noImage
+                }
                 alt={movie.title}
+                className={styles.moviePoster}
               />
             </div>
-            <h2 className={styles.movieTitle}>{movie.title}</h2>
-            <p>
-              Release date: {movie.release_date}
-              {/* {movie.release_date.split(' ', 1)} */}
-            </p>
-            <p>
-              <span className={styles.movieRating}>Rating: </span>
-              {movie.vote_average}
-            </p>
-            <h3 className={styles.overviewTitle}>Overview:</h3>
-            <p className={styles.overview}>{movie.overview}</p>
-            {movie.genres ? (
-              <ul className={styles.genres}>
-                Genres:
-                {movie.genres.map(genre => (
-                  <li key={genre.id}>{`${genre.name}`}</li>
-                ))}
+            <div className={styles.aboutMovieWrapper}>
+              <h2 className={styles.movieTitle}>{movie.title}</h2>
+              <p>
+                <span className={styles.releaseDate}>Release date:</span>
+                {movie.release_date}
+                {/* {movie.release_date.split(' ', 1)} */}
+              </p>
+              <p className={styles.movieRating}>
+                <span className={styles.ratingCaption}>Rating: </span>
+                {movie.vote_average}
+              </p>
+              <p className={styles.overviewTitle}>Overview:</p>
+              <p className={styles.overview}>{movie.overview}</p>
+              {movie.genres ? (
+                <ul className={styles.genres}>
+                  Genres:
+                  {movie.genres.map(genre => (
+                    <li
+                      key={genre.id}
+                      className={styles.genreItem}
+                    >{`${genre.name}`}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No genres</p>
+              )}
+
+              <p className={styles.information}>Additional information:</p>
+              <ul className={styles.informationList}>
+                <li>
+                  <NavLink
+                    to={`${url}/Cast`}
+                    className={styles.informationLink}
+                    activeClassName={styles.active}
+                  >
+                    Cast
+                  </NavLink>
+                </li>
+
+                <li>
+                  <NavLink
+                    to={`${url}/Reviews`}
+                    className={styles.informationLink}
+                    activeClassName={styles.active}
+                  >
+                    Reviews
+                  </NavLink>
+                </li>
               </ul>
-            ) : (
-              <p>No genres</p>
-            )}
+            </div>
           </div>
         </>
       )}
 
-      <p className={styles.information}>Additional information</p>
-      <ul className={styles.informationList}>
-        <li>
-          <NavLink
-            to={`${url}/Cast`}
-            className={styles.informationLink}
-            activeClassName={styles.active}
-          >
-            Cast
-          </NavLink>
-        </li>
-        {/* <Route path={`${path}/Cast`}>
+      <Suspense fallback={<LoaderSpinner />}>
+        <Route path={`${path}/Cast`}>
           <MovieCast movieId={movieId} />
-        </Route> */}
-        <li>
-          <NavLink
-            to={`${url}/Reviews`}
-            className={styles.informationLink}
-            activeClassName={styles.active}
-          >
-            Reviews
-          </NavLink>
-        </li>
-        {/* <Route path={`${path}/Reviews`}>
+        </Route>
+
+        <Route path={`${path}/Reviews`}>
           <MovieReview movieId={movieId} />
-        </Route> */}
-      </ul>
-
-      <Route path={`${path}/Cast`}>
-        <MovieCast movieId={movieId} />
-      </Route>
-
-      <Route path={`${path}/Reviews`}>
-        <MovieReview movieId={movieId} />
-      </Route>
+        </Route>
+      </Suspense>
     </>
   );
 }

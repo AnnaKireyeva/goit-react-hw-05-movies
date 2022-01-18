@@ -6,6 +6,7 @@ import styles from './MoviesSearchbarPage.module.css';
 import PropTypes from 'prop-types';
 import api from '../Services/ApiService';
 import Loader from 'react-loader-spinner';
+import { MdSearch, MdMovie } from 'react-icons/md';
 
 export default function MoviesSearchbarPage() {
   const history = useHistory();
@@ -17,7 +18,7 @@ export default function MoviesSearchbarPage() {
   const { url } = useRouteMatch();
 
   const searchQuery = new URLSearchParams(location.search).get('query') ?? '';
-  console.log(searchQuery);
+  // console.log(searchQuery);
 
   //   useEffect(() => {
   //     if (query.trim() === '') {
@@ -64,7 +65,6 @@ export default function MoviesSearchbarPage() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(query);
 
     if (query.trim() === '') {
       toast.warning('Enter your query!');
@@ -78,23 +78,27 @@ export default function MoviesSearchbarPage() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input
-          className={styles.input}
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Enter movie's name"
-          value={query}
-          onChange={handleInputChange}
-        />
+      <div className={styles.searchFormWrapper}>
+        <form onSubmit={handleSubmit} className={styles.searchForm}>
+          <input
+            className={styles.input}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Enter movie's name"
+            value={query}
+            onChange={handleInputChange}
+          />
 
-        <button type="submit">Search</button>
-      </form>
+          <button type="submit" className={styles.searchBtn}>
+            <MdSearch size={24} />
+          </button>
+        </form>
+      </div>
 
       {error && <p className={styles.error}>Movie "{query}" not found</p>}
       {foundMovies && (
-        <ul>
+        <ul className={styles.listMovies}>
           {foundMovies.map(movie => (
             <li key={movie.id}>
               <Link
@@ -102,7 +106,9 @@ export default function MoviesSearchbarPage() {
                   pathname: `${url}/&{movieId}`,
                   state: { from: location },
                 }}
+                className={styles.movieLink}
               >
+                <MdMovie size={16} className={styles.icon} />
                 {movie.title}
               </Link>
             </li>

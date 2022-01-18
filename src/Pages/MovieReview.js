@@ -1,6 +1,7 @@
 import styles from './MovieReview.module.css';
 import { useState, useEffect } from 'react';
 import api from '../Services/ApiService';
+import PropTypes from 'prop-types';
 
 export default function MovieReview({ movieId }) {
   const [reviews, setReviews] = useState(null);
@@ -20,9 +21,13 @@ export default function MovieReview({ movieId }) {
 
   return (
     <>
-      {noReviews && <p>We don't have any reviews for this movie.</p>}
+      {noReviews && (
+        <p className={styles.noReview}>
+          We don't have any reviews for this movie.
+        </p>
+      )}
       {reviews && (
-        <ul>
+        <ul className={styles.reviewList}>
           {reviews.map(review => {
             return (
               <li key={review.id}>
@@ -36,3 +41,7 @@ export default function MovieReview({ movieId }) {
     </>
   );
 }
+
+MovieReview.propTypes = {
+  movieId: PropTypes.string.isRequired,
+};

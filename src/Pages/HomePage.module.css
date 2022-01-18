@@ -1,0 +1,30 @@
+.homePageTitle {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  margin-left: 10px;
+  /* color: #a71428; */
+  /* text-shadow: 4px 4px 5px red; */
+  color: #2e2e2e;
+  text-shadow: 1px 1px 1px #e60448, 2px 2px 1px #e60448;
+}
+
+.movieList {
+  padding: 10px;
+}
+.icon {
+  margin-right: 5px;
+}
+.movieLink {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2e2e2e;
+}
+.movieLink:hover,
+.movieLink:focus {
+  color: #ff255f;
+}

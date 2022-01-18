@@ -1,0 +1,10 @@
+.reviewList {
+  padding: 0px 50px;
+  list-style: square;
+}
+.noReview {
+  padding: 0px 50px;
+}
+.author {
+  font-weight: 500;
+}
