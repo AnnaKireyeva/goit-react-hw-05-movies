@@ -9,10 +9,7 @@ import {
 } from 'react-router-dom';
 import api from '../Services/ApiService';
 import { LoaderSpinner } from '../Components/LoaderSpinner/LoaderSpinner';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import styles from './MovieDetailsView.module.css';
-// import MovieCast from './MovieCast';
-// import MovieReview from './MovieReview';
 import noImage from '../Images/no-image.jpg';
 
 const MovieCast = lazy(() =>
@@ -30,21 +27,15 @@ export default function MovieDetailsView() {
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(true);
 
-  //   useEffect(() => {
-  //     api.fetchDetailsOfMovie(movieId).then(setMovie);
-  //   }, [movieId]);
-
   useEffect(() => {
     api.fetchDetailsOfMovie(movieId).then(movie => {
       setMovie(movie);
       setLoading(false);
-      console.log(movie);
     });
   }, [movieId]);
 
   const handleGoBackButton = () => {
-    history.push(location?.state?.from ?? '/');
-    console.log(location);
+    history.push(location.state?.from ? location.state.from : '/');
   };
 
   return (
@@ -77,7 +68,6 @@ export default function MovieDetailsView() {
               <p>
                 <span className={styles.releaseDate}>Release date:</span>
                 {movie.release_date}
-                {/* {movie.release_date.split(' ', 1)} */}
               </p>
               <p className={styles.movieRating}>
                 <span className={styles.ratingCaption}>Rating: </span>

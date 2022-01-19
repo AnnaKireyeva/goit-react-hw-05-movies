@@ -17,7 +17,6 @@ export default function MovieReview({ movieId }) {
       })
       .then(setReviews);
   }, [movieId]);
-  console.log(reviews);
 
   return (
     <>

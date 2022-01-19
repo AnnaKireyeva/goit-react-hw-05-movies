@@ -5,39 +5,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from './MoviesSearchbarPage.module.css';
 import PropTypes from 'prop-types';
 import api from '../Services/ApiService';
-import Loader from 'react-loader-spinner';
 import { MdSearch, MdMovie } from 'react-icons/md';
 
 export default function MoviesSearchbarPage() {
   const history = useHistory();
   const location = useLocation();
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(false);
-  const [foundMovies, setFoundMovies] = useState(null);
+  const [foundMovies, setFoundMovies] = useState([]);
   const { url } = useRouteMatch();
 
   const searchQuery = new URLSearchParams(location.search).get('query') ?? '';
-  // console.log(searchQuery);
-
-  //   useEffect(() => {
-  //     if (query.trim() === '') {
-  //       return;
-  //     }
-
-  //     api
-  //       .fetchMovieByQuery(query)
-  //       .then(response => {
-  //         if (response.results.length === 0) {
-  //           setError(true);
-
-  //           return;
-  //         }
-  //         setError(false);
-  //         return response.results;
-  //       })
-  //       .then(setFoundMovies);
-  //   }, [query]);
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -49,7 +28,6 @@ export default function MoviesSearchbarPage() {
       .then(response => {
         if (response.results.length === 0) {
           setError(true);
-
           return;
         }
         setError(false);
@@ -59,7 +37,6 @@ export default function MoviesSearchbarPage() {
   }, [searchQuery]);
 
   const handleInputChange = e => {
-    // console.log(e.currentTarget.value);
     setQuery(e.currentTarget.value.toLowerCase());
   };
 
@@ -72,7 +49,6 @@ export default function MoviesSearchbarPage() {
     }
     history.push({ ...location, search: `query=${query}` });
 
-    // onSubmit(query);
     setQuery('');
   };
 
@@ -103,7 +79,7 @@ export default function MoviesSearchbarPage() {
             <li key={movie.id}>
               <Link
                 to={{
-                  pathname: `${url}/&{movieId}`,
+                  pathname: `${url}/${movie.id}`,
                   state: { from: location },
                 }}
                 className={styles.movieLink}
@@ -114,16 +90,6 @@ export default function MoviesSearchbarPage() {
             </li>
           ))}
         </ul>
-      )}
-      {loading && (
-        <Loader
-          type="Oval"
-          color="#FF6347"
-          height={80}
-          width={80}
-          timeout={5000}
-          className="Loader"
-        />
       )}
     </>
   );

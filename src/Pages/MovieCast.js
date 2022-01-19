@@ -14,8 +14,6 @@ export default function MovieCast({ movieId }) {
       .then(setCast);
   }, [movieId]);
 
-  console.log(cast);
-
   return (
     <>
       {cast && (

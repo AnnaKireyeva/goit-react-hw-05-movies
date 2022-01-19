@@ -15,13 +15,6 @@ export default function HomePage() {
       .then(setTrendingMovies);
   }, []);
 
-  // useEffect(() => {
-  //   api.fetchTrendingMoviesOfTheDay().then(results => {
-  //     setTrendingMovies(results);
-  //     return results;
-  //   });
-  // }, []);
-
   return (
     <>
       <h2 className={styles.homePageTitle}>Trending today</h2>
