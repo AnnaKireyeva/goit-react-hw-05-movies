@@ -72,7 +72,11 @@ export default function MoviesSearchbarPage() {
         </form>
       </div>
 
-      {error && <p className={styles.error}>Movie "{query}" not found</p>}
+      {error && (
+        <p className={styles.error}>
+          We don't have movies matching your request
+        </p>
+      )}
       {foundMovies && (
         <ul className={styles.listMovies}>
           {foundMovies.map(movie => (

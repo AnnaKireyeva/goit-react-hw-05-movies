@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import {
   NavLink,
   useParams,
@@ -26,6 +26,7 @@ export default function MovieDetailsView() {
   const { url, path } = useRouteMatch();
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(true);
+  const locationRef = useRef(location);
 
   useEffect(() => {
     api.fetchDetailsOfMovie(movieId).then(movie => {
@@ -35,7 +36,13 @@ export default function MovieDetailsView() {
   }, [movieId]);
 
   const handleGoBackButton = () => {
-    history.push(location.state?.from ? location.state.from : '/');
+    if (locationRef.current.state) {
+      const search = locationRef.current.state.from.search;
+      const pathname = locationRef.current.state.from.pathname;
+      history.push(search ? pathname + search : pathname);
+    } else {
+      history.push('/');
+    }
   };
 
   return (

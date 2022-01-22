@@ -6,16 +6,29 @@ import PropTypes from 'prop-types';
 
 export default function MovieCast({ movieId }) {
   const [cast, setCast] = useState(null);
+  const [noCast, setNoCast] = useState(false);
+
+  // useEffect(() => {
+  //   api
+  //     .fetchCastOfMovie(movieId)
+  //     .then(response => response.cast)
+  //     .then(setCast);
+  // }, [movieId]);
 
   useEffect(() => {
     api
       .fetchCastOfMovie(movieId)
-      .then(response => response.cast)
+      .then(response => {
+        if (response.cast.length === 0) {
+          setNoCast(true);
+        } else return response.cast;
+      })
       .then(setCast);
   }, [movieId]);
 
   return (
     <>
+      {noCast && <p>We don't have cast for this movie.</p>}
       {cast && (
         <ul className={styles.actorsList}>
           {cast.map(actor => {
